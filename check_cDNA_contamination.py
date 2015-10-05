@@ -74,7 +74,7 @@ def ProcessData(dataDF):
                 site2 = str(record.loc['Site2Description'])
                 fusion = str(record.loc['Fusion'])
                 brkptType = str(record.loc['BrkptType'])
-                # Skip entries that are within exon and are in-frame and out-of frame.
+                # Skip entries that are within exon or are in-frame or out-of frame or are IMPRECISE.
                 if(("Exon" in site1 and "Exon" in site2) or ("in frame" in fusion or "out of frame" in fusion) or (brkptType == "IMPRECISE")):
                     continue
                 else:
