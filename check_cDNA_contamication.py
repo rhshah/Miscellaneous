@@ -74,12 +74,11 @@ def ProcessData(dataDF):
                 site2 = record.loc['Site2Description']
                 fusion = record.loc['Fusion']
                 # Skip entries that are within exon and are in-frame and out-of frame.
-                if("Exon" in site1 and "Exon" in site2):
+                if(("Exon" in site1 and "Exon" in site2) or ("in frame" in fusion or "out of frame" in fusion)):
                     continue
-                if("in frame" in fusion or "out of frame" in fusion):
-                    continue
-                count = count + 1
-        # count the entires,genes and fill the resultdict
+                else:
+                    count = count + 1
+        # count the entries,genes and fill the resultdict
         if tumorID in resultdict:   
             geneList = resultdict[tumorID]
             if(count >= 2):
