@@ -70,9 +70,9 @@ def ProcessData(dataDF):
         if(svtype == 'DEL' and entires >= 2):
             for idx in value:
                 record = dataDF.loc[idx]
-                site1 = record.loc['Site1Description']
-                site2 = record.loc['Site2Description']
-                fusion = record.loc['Fusion']
+                site1 = str(record.loc['Site1Description'])
+                site2 = str(record.loc['Site2Description'])
+                fusion = str(record.loc['Fusion'])
                 # Skip entries that are within exon and are in-frame and out-of frame.
                 if(("Exon" in site1 and "Exon" in site2) or ("in frame" in fusion or "out of frame" in fusion)):
                     continue
