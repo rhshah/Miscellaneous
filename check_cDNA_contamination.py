@@ -2,7 +2,7 @@
 Created on 11/01/2015.
 @author: Ronak H Shah
 ###Required Input columns in the structural variant file
-"TumorId    NormalId    Chr1    Pos1    Chr2    Pos2    SV_Type    Gene1    Gene2    Transcript1    Transcript2    Site1Description    Site2Description    Fusion"
+TumorId    NormalId    Chr1    Pos1    Chr2    Pos2    SV_Type    Gene1    Gene2    Transcript1    Transcript2    Site1Description    Site2Description    Fusion    Confidence    Comments    Connection_Type    SV_LENGTH    MAPQ    PairEndReadSupport    SplitReadSupport    BrkptType    ConsensusSequence    TumorVariantCount    TumorSplitVariantCount    TumorReadCount    TumorGenotypeQScore    NormalVariantCount    NormalSplitVariantCount    NormalReadCount    NormalGenotypeQScore
 ###Output columns
 "TumorId    Genes_with_cDNA_contamination"
 """
@@ -73,8 +73,9 @@ def ProcessData(dataDF):
                 site1 = str(record.loc['Site1Description'])
                 site2 = str(record.loc['Site2Description'])
                 fusion = str(record.loc['Fusion'])
+                brkptType = str(record.loc['BrkptType'])
                 # Skip entries that are within exon and are in-frame and out-of frame.
-                if(("Exon" in site1 and "Exon" in site2) or ("in frame" in fusion or "out of frame" in fusion)):
+                if(("Exon" in site1 and "Exon" in site2) or ("in frame" in fusion or "out of frame" in fusion) or (brkptType == "IMPRECISE")):
                     continue
                 else:
                     count = count + 1
