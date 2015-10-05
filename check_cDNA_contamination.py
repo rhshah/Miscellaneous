@@ -91,14 +91,18 @@ def ProcessData(dataDF):
     return(resultdict)
 
 def WriteResults(dataDict, args):
-    # Convert the dictionaries values which are as list to string
-    for key, value in dataDict.iteritems():
-        newvalue = ', '.join(value)
-        dataDict[key] = newvalue
-        
-    resultDF = pd.DataFrame(dataDict.items(), columns=['TumorId', 'Genes_with_cDNA_contamination']).sort('TumorId')
-    # Print to TSV file
-    resultDF.to_csv(args.outFileName, sep='\t', index=False)
+    if not dataDict:
+        print "No contamination found\n"
+        return()
+    else:
+        # Convert the dictionaries values which are as list to string
+        for key, value in dataDict.iteritems():
+            newvalue = ', '.join(value)
+            dataDict[key] = newvalue
+            
+        resultDF = pd.DataFrame(dataDict.items(), columns=['TumorId', 'Genes_with_cDNA_contamination']).sort('TumorId')
+        # Print to TSV file
+        resultDF.to_csv(args.outFileName, sep='\t', index=False)
     return()
     
 #Run the main program      
