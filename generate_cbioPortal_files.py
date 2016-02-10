@@ -98,8 +98,8 @@ def main():
                         alt = "-"
                     elif(len(x['Alt']) > 1):
                         alt = x['Alt'][1:]
-                    start_position = x['Start']
-                    end_position = int(x['Start']) + len(ref) - 1
+                    start_position = x['Start'] + 1
+                    end_position = int(x['Start']) + len(ref) 
                 elif len(x['Ref']) < len(x['Alt']):
                     var_type = "INS"
                     if(len(x['Ref']) == 1):
