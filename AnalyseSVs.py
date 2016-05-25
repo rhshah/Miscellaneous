@@ -180,7 +180,7 @@ def Read_SVfile2(file, args):
         pos2 = (row.loc['Pos2'])
         gene1 = str(row.loc['Gene1'])
         gene2 = str(row.loc['Gene2'])
-        if((math.isnan(pos1)) or (math.isnan(pos2))):
+        if((pos1 is None) or (pos1 == "None") or (pos2 is None) or (pos2 == "None")):
             continue
         #newEntry1 = chr1 + ":" + pos1 + ":" + gene1 + ":" + gene2
         #newEntry2 = chr2 + ":" + pos2 + ":" + gene2 + ":" + gene1
