@@ -166,9 +166,9 @@ def SetupRun(poolName, id, args):
         if(os.path.isdir(sv_dir)):
             if(args.verbose):
                 print "\tSV Location:", sv_dir, "\n"
-            delFile = glob.glob(sv_dir + "/*del.vcf")
+            delFile = glob.globo(os.path.join(sv_dir , "/*del.vcf"))
             print delFile
-            delFile = delFile[0]
+            #delFile = delFile[0]
             dupFile = glob.glob(sv_dir + "/*dup.vcf")
             dupFile = dupFile[0]
             invFile = glob.glob(sv_dir + "/*inv.vcf")
