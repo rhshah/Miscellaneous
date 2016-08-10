@@ -163,14 +163,18 @@ def SetupRun(poolName, id, args):
         if(args.verbose):
             print "\tQC Location:", qclocation, "\n"
         sv_dir = qclocation + "/StrVarAnalysis/" + id
-        delFile = glob.glob(sv_dir + "/*del.vcf")
-        delFile = delFile[0]
-        dupFile = glob.glob(sv_dir + "/*dup.vcf")
-        dupFile = dupFile[0]
-        invFile = glob.glob(sv_dir + "/*inv.vcf")
-        invFile = invFile[0]
-        jmpFile = glob.glob(sv_dir + "/*jmp.vcf")  
-        jmpFile = jmpFile[0]   
+        if(os.path.isdir(sv_dir)):
+            if(args.verbose):
+                print "\tSV Location:", sv_dir, "\n"
+            delFile = glob.glob(sv_dir + "/*del.vcf")
+            print delFile
+            delFile = delFile[0]
+            dupFile = glob.glob(sv_dir + "/*dup.vcf")
+            dupFile = dupFile[0]
+            invFile = glob.glob(sv_dir + "/*inv.vcf")
+            invFile = invFile[0]
+            jmpFile = glob.glob(sv_dir + "/*jmp.vcf")  
+            jmpFile = jmpFile[0]   
     else:
         if(args.verbose):
             print "\tQC LOCATION", qclocation, " DOES NOT EXISTS!!!, Please Review you qcLocation INPUT\n"
