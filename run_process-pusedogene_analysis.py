@@ -163,6 +163,7 @@ def SetupRun(poolName, id, args):
         if(args.verbose):
             print "\tQC Location:", qclocation, "\n"
         sv_dir = qclocation + "/StrVarAnalysis/" + id
+        print sv_dir
         if(os.path.isdir(sv_dir)):
             if(args.verbose):
                 print "\tSV Location:", sv_dir, "\n"
