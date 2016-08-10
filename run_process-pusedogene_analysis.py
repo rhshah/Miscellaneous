@@ -162,12 +162,11 @@ def SetupRun(poolName, id, args):
     if(os.path.isdir(qclocation)):
         if(args.verbose):
             print "\tQC Location:", qclocation, "\n"
-        sv_dir = qclocation + "/StrVarAnalysis/" + id
-        print sv_dir
+        sv_dir = qclocation + "/StrVarAnalysis/"
         if(os.path.isdir(sv_dir)):
             if(args.verbose):
                 print "\tSV Location:", sv_dir, "\n"
-            delFile = glob.globo(os.path.join(sv_dir , "/*del.vcf"))
+            delFile = glob.globo(os.path.join(sv_dir , id,"*/*del.vcf"))
             print delFile
             delFile = delFile[0]
             dupFile = glob.glob(sv_dir + "/*dup.vcf")
