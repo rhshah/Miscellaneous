@@ -196,12 +196,12 @@ def RunPerPool(vcfFile,id,sampledir,count,args):
     if(os.path.isfile(vcfFile)):
         jobId = "run_ppg_" + str(count) + "_" + str(id)
         cmdList = []
-        cmd = args.python + " " + args.ppg + " " + vcfFile + " " + args.sampledir + " -s " + id + " --iAnnotateSV " + args.ias + " --genome hg19"
+        cmd = args.python + " " + args.ppg + " " + vcfFile + " " + sampledir + " -s " + id + " --iAnnotateSV " + args.ias + " --genome hg19"
         # cmd = str(cmd)
         threads = int(args.threads)
         threads = threads + 1
         qsub_cmd = args.qsub + " -q " + args.queue + " -N " + jobId + " -o " + jobId + ".stdout" + " -e " + jobId + ".stderr" + \
-            " -V -l h_vmem=6G,virtual_free=6G -pe smp " + str(threads) + " -wd " + args.sampledir + " -sync y " + " -b y " + cmd
+            " -V -l h_vmem=6G,virtual_free=6G -pe smp " + str(threads) + " -wd " + sampledir + " -sync y " + " -b y " + cmd
         print "qsub_cmd:", qsub_cmd, "\n"
         cmdList.append(qsub_cmd)
         job = Job(
