@@ -109,7 +109,7 @@ def main():
         "-o",
         "--outDir",
         action="store",
-        dest="outDir",
+        dest="outdir",
         required=True,
         metavar='/somepath/output',
         help="Full Path to the output dir.")
