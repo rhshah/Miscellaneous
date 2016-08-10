@@ -126,14 +126,14 @@ def main():
         pooldir = args.outdir + "/" + poolName
         if(os.path.isdir(pooldir)):
             if(args.verbose):
-                print "Pool Output Dir:", outdir, "exists!!!"
+                print "Pool Output Dir:", pooldir, "exists!!!"
         else:
             os.mkdir(pooldir)
             os.chmod(pooldir, 0o755)
         sampledir = pooldir + "/" + id
         if(os.path.isdir(sampledir)):
             if(args.verbose):
-                print "Pool Output Dir:", outdir, "exists!!!"
+                print "Sample Output Dir:", sampledir, "exists!!!"
         else:
             os.mkdir(sampledir)
             os.chmod(sampledir, 0o755)
