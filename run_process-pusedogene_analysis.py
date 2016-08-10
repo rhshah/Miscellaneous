@@ -194,7 +194,7 @@ def RunPerPool(vcfFile,id,sampledir,count,args):
     """
     jobs = []
     if(os.path.isfile(vcfFile)):
-        jobId = "run_ppg_" + str(count) + "_" + str(basename)
+        jobId = "run_ppg_" + str(count) + "_" + str(id)
         cmdList = []
         cmd = args.python + " " + args.ppg + " " + vcfFile + " " + args.sampledir + " -s " + id + " --iAnnotateSV " + args.ias + " --genome hg19"
         # cmd = str(cmd)
