@@ -137,7 +137,7 @@ def main():
         else:
             os.mkdir(sampledir)
             os.chmod(sampledir, 0o755)
-        RunPerPool(delvcf, id, sampledir,args)
+        RunPerPool(delvcf, id, sampledir,index,args)
     if(args.verbose):
         print "Finished the Process to Run process-psuedogene."
 
@@ -167,7 +167,6 @@ def SetupRun(poolName, id, args):
             if(args.verbose):
                 print "\tSV Location:", sv_dir, "\n"
             delFile = glob.glob(os.path.join(sv_dir , id + "*/*del.vcf"))
-            print delFile
             delFile = delFile[0]
             dupFile = glob.glob(os.path.join(sv_dir , id + "*/*dup.vcf"))
             dupFile = dupFile[0]
@@ -182,7 +181,7 @@ def SetupRun(poolName, id, args):
     return(delFile)
 
 
-def RunPerPool(vcfFile,id,sampledir,args):
+def RunPerPool(vcfFile,id,sampledir,count,args):
     """This will run the pool to be analyzed.
 
 
