@@ -118,12 +118,26 @@ def main():
     if(args.verbose):
         print "Starting the Process to Run process-psuedogene."
     
-    metaInfoDF = pd.read_excel(args.mif)
+    metaInfoDF = pd.read_table(args.mif,sep="\t")
     for index,rows in metaInfoDF.iterrows():
         poolName = rows.loc['Run']
         id = rows.loc['LIMS_ID']
         delvcf = SetupRun(poolName, id,args)
-        RunPerPool(delvcf, id, args)
+        pooldir = args.outdir + "/" + poolName
+        if(os.path.isdir(pooldir)):
+            if(args.verbose):
+                print "Pool Output Dir:", outdir, "exists!!!"
+        else:
+            os.mkdir(pooldir)
+            os.chmod(pooldir, 0o755)
+        sampledir = pooldir + "/" + id
+        if(os.path.isdir(sampledir)):
+            if(args.verbose):
+                print "Pool Output Dir:", outdir, "exists!!!"
+        else:
+            os.mkdir(sampledir)
+            os.chmod(sampledir, 0o755)
+        RunPerPool(delvcf, id, sampledir,args)
     if(args.verbose):
         print "Finished the Process to Run process-psuedogene."
 
@@ -159,7 +173,7 @@ def SetupRun(poolName, id, args):
     return(delFile)
 
 
-def RunPerPool(vcfFile,id,args):
+def RunPerPool(vcfFile,id,sampledir,args):
     """This will run the pool to be analyzed.
 
 
@@ -174,12 +188,12 @@ def RunPerPool(vcfFile,id,args):
     if(os.path.isfile(vcfFile)):
         jobId = "run_ppg_" + str(count) + "_" + str(basename)
         cmdList = []
-        cmd = args.python + " " + args.ppg + " " + vcfFile + " " + args.outdir + " -s " + id + " --iAnnotateSV " + args.ias + " --genome hg19"
+        cmd = args.python + " " + args.ppg + " " + vcfFile + " " + args.sampledir + " -s " + id + " --iAnnotateSV " + args.ias + " --genome hg19"
         # cmd = str(cmd)
         threads = int(args.threads)
         threads = threads + 1
         qsub_cmd = args.qsub + " -q " + args.queue + " -N " + jobId + " -o " + jobId + ".stdout" + " -e " + jobId + ".stderr" + \
-            " -V -l h_vmem=6G,virtual_free=6G -pe smp " + str(threads) + " -wd " + outdir + " -sync y " + " -b y " + cmd
+            " -V -l h_vmem=6G,virtual_free=6G -pe smp " + str(threads) + " -wd " + args.sampledir + " -sync y " + " -b y " + cmd
         print "qsub_cmd:", qsub_cmd, "\n"
         cmdList.append(qsub_cmd)
         job = Job(
