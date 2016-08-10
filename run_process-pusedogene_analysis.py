@@ -169,11 +169,11 @@ def SetupRun(poolName, id, args):
             delFile = glob.glob(os.path.join(sv_dir , id + "*/*del.vcf"))
             print delFile
             delFile = delFile[0]
-            dupFile = glob.glob(sv_dir + "/*dup.vcf")
+            dupFile = glob.glob(os.path.join(sv_dir , id + "*/*dup.vcf"))
             dupFile = dupFile[0]
-            invFile = glob.glob(sv_dir + "/*inv.vcf")
+            invFile = glob.glob(os.path.join(sv_dir , id + "*/*inv.vcf"))
             invFile = invFile[0]
-            jmpFile = glob.glob(sv_dir + "/*jmp.vcf")  
+            jmpFile = glob.glob(os.path.join(sv_dir , id + "*/*jmp.vcf"))
             jmpFile = jmpFile[0]   
     else:
         if(args.verbose):
