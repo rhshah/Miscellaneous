@@ -98,7 +98,7 @@ def main():
         dDF = pd.read_table(args.refFilename,sep=",",header=None,usecols=[1,2,3])
         dDF.columns = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID"]
     else:
-        logging.error("get_DMP_ID:%s is not a file. We will exit. Please make sure you provide a valid sample mapping file before rerun.", args.refFilename)
+        logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample mapping file before rerun.", args.refFilename)
         sys.exit(1)
     
     if(os.path.isdir(args.bamLocation)):
@@ -107,7 +107,7 @@ def main():
         else:
             pass
     else:
-        logging.error("get_DMP_ID:%s is not a directory. We will exit. Please make sure you provide a valid bam location directory before rerun.", args.bamLocation)
+        logging.error("get_DMP_ID: %s is not a directory. We will exit. Please make sure you provide a valid bam location directory before rerun.", args.bamLocation)
        
     outDF = pd.DataFrame(
         columns=[
@@ -119,9 +119,9 @@ def main():
     
     for count,row in iDF.iterrows():
         iID = row.loc["SAMPLE_ID"]
-        dDF_idx = dDF[dDF["SAMPLE_ID"]==iID].index().tolist()[0]
-        dID = dDF.iloc[dDF_idx,"D_SAMPLE_ID"]
-        gID = dDF.iloc[dDF_idx,"GROUP_ID"]
+        dDF_idx = dDF[dDF["SAMPLE_ID"]==iID].index().tolist()
+        dID = dDF.iloc[dDF_idx[0],"D_SAMPLE_ID"]
+        gID = dDF.iloc[dDF_idx[0],"GROUP_ID"]
         bamFile = glob.glob(args.bamLocation +"/" + dID +"*.bam")
         outDF.loc[count,["SAMPLE_ID",
             "D_SAMPLE_ID",
