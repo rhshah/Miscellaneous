@@ -131,7 +131,7 @@ def main():
             "D_SAMPLE_ID",
             "SAMPLE_TYPE",
             "GROUP_ID",
-            "BAM_LOCATION"]] = [str(iID),str(dID),str(gID),str(bamFile)] 
+            "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)] 
     
     outDF.to_csv(args.outFile, sep='\t', index=False)
     if(verbose):
