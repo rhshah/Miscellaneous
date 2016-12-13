@@ -88,6 +88,7 @@ def main():
             logger.info("get_DMP_ID: %s is being Read...", args.idFilename)
         iDF = pd.read_table(args.idFilename,sep="\t",header=None)
         iDF.columns = ["SAMPLE_ID"]
+        print iDF.head(n=5)
     else:
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample id file before rerun.", args.idFilename)
         sys.exit(1)
@@ -97,6 +98,7 @@ def main():
             logger.info("get_DMP_ID: %s is being Read...", args.refFilename)
         dDF = pd.read_table(args.refFilename,sep=",",header=None,usecols=[1,2,3])
         dDF.columns = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID"]
+        print dDF.head(n=5)
     else:
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample mapping file before rerun.", args.refFilename)
         sys.exit(1)
@@ -120,8 +122,8 @@ def main():
     for count,row in iDF.iterrows():
         iID = row.loc["SAMPLE_ID"]
         dDF_idx = dDF[dDF["SAMPLE_ID"]==iID].index().tolist()
-        dID = dDF.iloc[dDF_idx[0],"D_SAMPLE_ID"]
-        gID = dDF.iloc[dDF_idx[0],"GROUP_ID"]
+        dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
+        gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
         bamFile = glob.glob(args.bamLocation +"/" + dID +"*.bam")
         outDF.loc[count,["SAMPLE_ID",
             "D_SAMPLE_ID",
