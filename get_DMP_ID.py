@@ -123,15 +123,27 @@ def main():
     
     for count,row in iDF.iterrows():
         iID = str(row.loc["SAMPLE_ID"])
-        dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
-        dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
-        gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
-        bamFile = glob.glob(args.bamLocation +"/" + str(dID) +"*.bam")
-        outDF.loc[count,["SAMPLE_ID",
-            "D_SAMPLE_ID",
-            "SAMPLE_TYPE",
-            "GROUP_ID",
-            "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)] 
+        try:
+            dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
+        except IndexError:
+            logger.warning("Sample ID: %s is not present in mapping file we will print an empty entry.")
+            dDF_idx = None
+        if(dDF_idx):
+            dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
+            gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
+            bamFile = glob.glob(args.bamLocation +"/" + str(dID) +"*.bam")
+            outDF.loc[count,["SAMPLE_ID",
+                             "D_SAMPLE_ID",
+                             "SAMPLE_TYPE",
+                             "GROUP_ID",
+                             "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)]
+        else:
+            outDF.loc[count,["SAMPLE_ID",
+                             "D_SAMPLE_ID",
+                             "SAMPLE_TYPE",
+                             "GROUP_ID",
+                             "BAM_LOCATION"]] = [str(iID),None,"TUMOR",None,None] 
+            
     
     outDF.to_csv(args.outFile, sep='\t', index=False)
     if(verbose):
