@@ -131,7 +131,7 @@ def main():
         if(dDF_idx):
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
             gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
-            bamFile = (glob.glob(args.bamLocation +"/" + str(dID) +"*.bam")).join(",")
+            bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
             outDF.loc[count,["SAMPLE_ID",
                              "D_SAMPLE_ID",
                              "SAMPLE_TYPE",
