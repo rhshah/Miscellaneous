@@ -126,7 +126,6 @@ def main():
         try:
             dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
         except IndexError:
-            logger.critical("Sample ID: %s is not present in mapping file we will print an empty entry.")
             dDF_idx = None
         if(dDF_idx):
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
@@ -156,6 +155,7 @@ def main():
                     continue
             
         else:
+            logger.critical("Sample ID: %s is not present in mapping file we will print an empty entry.", iID)
             outDF.loc[count,["SAMPLE_ID",
                              "D_SAMPLE_ID",
                              "SAMPLE_TYPE",
