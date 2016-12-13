@@ -126,12 +126,12 @@ def main():
         dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
         dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
         gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
-        bamFile = glob.glob(args.bamLocation +"/" + dID +"*.bam")
+        bamFile = glob.glob(args.bamLocation +"/" + str(dID) +"*.bam")
         outDF.loc[count,["SAMPLE_ID",
             "D_SAMPLE_ID",
             "SAMPLE_TYPE",
             "GROUP_ID",
-            "BAM_LOCATION"]] = [iID,dID,gID,bamFile] 
+            "BAM_LOCATION"]] = [str(iID),str(dID),str(gID),str(bamFile)] 
     
     outDF.to_csv(args.outFile, sep='\t', index=False)
     if(verbose):
