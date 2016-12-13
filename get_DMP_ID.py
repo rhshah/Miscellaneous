@@ -122,8 +122,8 @@ def main():
             "BAM_LOCATION"])
     
     for count,row in iDF.iterrows():
-        iID = row.loc["SAMPLE_ID"]
-        dDF_idx = dDF[dDF["SAMPLE_ID"]==iID].index().tolist()
+        iID = str(row.loc["SAMPLE_ID"])
+        dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
         dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
         gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
         bamFile = glob.glob(args.bamLocation +"/" + dID +"*.bam")
