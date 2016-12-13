@@ -86,9 +86,10 @@ def main():
     if(os.path.isfile(args.idFilename)):
         if(verbose):
             logger.info("get_DMP_ID: %s is being Read...", args.idFilename)
-        iDF = pd.read_table(args.idFilename,sep="\t",header=None)
+        iDF = pd.read_table(args.idFilename,sep="\t",header=None,usecols=[0])
         iDF.columns = ["SAMPLE_ID"]
-        print iDF.head(n=5)
+        if(verbose):
+            logger.info("Identification DataFrame:\n%s",iDF.head(n=5))
     else:
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample id file before rerun.", args.idFilename)
         sys.exit(1)
@@ -96,9 +97,10 @@ def main():
     if(os.path.isfile(args.idFilename)):
         if(verbose):
             logger.info("get_DMP_ID: %s is being Read...", args.refFilename)
-        dDF = pd.read_table(args.refFilename,sep=",",header=None,usecols=[1,2,3])
+        dDF = pd.read_table(args.refFilename,sep=",",header=None,usecols=[0,1,2])
         dDF.columns = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID"]
-        print dDF.head(n=5)
+        if(verbose):
+            logger.info("Mapping DataFrame:\n%s",dDF.head(n=5))
     else:
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample mapping file before rerun.", args.refFilename)
         sys.exit(1)
