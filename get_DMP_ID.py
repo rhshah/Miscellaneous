@@ -91,7 +91,7 @@ def main():
         if(verbose):
             logger.info("Identification DataFrame:\n%s",iDF.head(n=5))
     else:
-        logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample id file before rerun.", args.idFilename)
+        logger.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample id file before rerun.", args.idFilename)
         sys.exit(1)
         
     if(os.path.isfile(args.idFilename)):
@@ -111,8 +111,8 @@ def main():
         else:
             pass
     else:
-        logging.error("get_DMP_ID: %s is not a directory. We will exit. Please make sure you provide a valid bam location directory before rerun.", args.bamLocation)
-       
+        logger.error("get_DMP_ID: %s is not a directory. We will exit. Please make sure you provide a valid bam location directory before rerun.", args.bamLocation)
+        sys.exit(1)
     outDF = pd.DataFrame(
         columns=[
             "SAMPLE_ID",
@@ -126,7 +126,7 @@ def main():
         try:
             dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
         except IndexError:
-            logger.warn("Sample ID: %s is not present in mapping file we will print an empty entry.")
+            logger.critical("Sample ID: %s is not present in mapping file we will print an empty entry.")
             dDF_idx = None
         if(dDF_idx):
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
