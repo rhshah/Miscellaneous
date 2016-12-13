@@ -161,7 +161,7 @@ def main():
                              "BAM_LOCATION"]] = [str(iID),None,"TUMOR",None,None] 
             
     
-    ouDF.sort_values(["GROUP_ID"], inplace=True, ascending=True)  
+    outDF.sort_values(["GROUP_ID"], inplace=True, ascending=True)  
     outDF.to_csv(args.outFile, sep='\t', index=False)
     if(verbose):
         logger.info("get_DMP_ID: Finished Mapping, Final data written in %s", args.outFile)
