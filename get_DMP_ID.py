@@ -139,7 +139,7 @@ def main():
                              "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)]
             #Get Normals
             gID_idx = dDF[dDF["GROUP_ID"] == gID].index.tolist()
-            for(gidx in gID_idx):
+            for gidx in gID_idx:
                 dDF_iID = dDF.loc[gidx,"SAMPLE_ID"]
                 if "-N" in dDF_iID:
                     dID = dDF.loc[gidx,"D_SAMPLE_ID"]
