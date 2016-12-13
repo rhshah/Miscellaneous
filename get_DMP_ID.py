@@ -126,7 +126,7 @@ def main():
         try:
             dDF_idx = dDF[dDF["SAMPLE_ID"] == iID].index.tolist()
         except IndexError:
-            logger.warning("Sample ID: %s is not present in mapping file we will print an empty entry.")
+            logger.warn("Sample ID: %s is not present in mapping file we will print an empty entry.")
             dDF_idx = None
         if(dDF_idx):
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
