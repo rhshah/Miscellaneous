@@ -120,7 +120,7 @@ def main():
             "SAMPLE_TYPE",
             "GROUP_ID",
             "BAM_LOCATION"])
-    
+    i = 0
     for count,row in iDF.iterrows():
         iID = str(row.loc["SAMPLE_ID"])
         try:
@@ -132,11 +132,12 @@ def main():
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
             gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
             bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
-            outDF.loc[count,["SAMPLE_ID",
+            outDF.loc[i,["SAMPLE_ID",
                              "D_SAMPLE_ID",
                              "SAMPLE_TYPE",
                              "GROUP_ID",
                              "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)]
+            i = i+1
             #Get Normals
             gID_idx = dDF[dDF["GROUP_ID"] == gID].index.tolist()
             for gidx in gID_idx:
@@ -145,11 +146,12 @@ def main():
                     dID = dDF.loc[gidx,"D_SAMPLE_ID"]
                     gID = dDF.loc[gidx,"GROUP_ID"]
                     bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
-                    outDF.loc[count,["SAMPLE_ID",
+                    outDF.loc[i,["SAMPLE_ID",
                                      "D_SAMPLE_ID",
                                      "SAMPLE_TYPE",
                                      "GROUP_ID",
                                      "BAM_LOCATION"]] = [str(iID),str(dID),"NORMAL",str(gID),str(bamFile)]
+                    i = i + 1
                 else:
                     continue
             
