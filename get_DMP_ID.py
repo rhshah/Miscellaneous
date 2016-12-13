@@ -137,6 +137,22 @@ def main():
                              "SAMPLE_TYPE",
                              "GROUP_ID",
                              "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)]
+            #Get Normals
+            gID_idx = dDF[dDF["GROUP_ID"] == gID].index.tolist()
+            for(gidx in gID_idx):
+                dDF_iID = dDF.loc[gidx,"SAMPLE_ID"]
+                if "-N" in dDF_iID:
+                    dID = dDF.loc[gidx,"D_SAMPLE_ID"]
+                    gID = dDF.loc[gidx,"GROUP_ID"]
+                    bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
+                    outDF.loc[count,["SAMPLE_ID",
+                                     "D_SAMPLE_ID",
+                                     "SAMPLE_TYPE",
+                                     "GROUP_ID",
+                                     "BAM_LOCATION"]] = [str(iID),str(dID),"NORMAL",str(gID),str(bamFile)]
+                else:
+                    continue
+            
         else:
             outDF.loc[count,["SAMPLE_ID",
                              "D_SAMPLE_ID",
