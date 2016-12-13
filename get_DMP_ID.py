@@ -86,7 +86,7 @@ def main():
     if(os.path.isfile(args.idFilename)):
         if(verbose):
             logger.info("get_DMP_ID: %s is being Read...", args.idFilename)
-        iDF = pd.read_table(args.idFilename,sep="\t",header=None,usecols=[1])
+        iDF = pd.read_table(args.idFilename,sep="\t",header=None)
         iDF.columns = ["SAMPLE_ID"]
     else:
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample id file before rerun.", args.idFilename)
