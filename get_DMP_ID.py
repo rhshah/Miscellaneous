@@ -20,13 +20,26 @@ SAMPLE_ID    D_SAMPLE_ID    SAMPLE_TYPE    GROUP_ID    BAM_LOCATION
 '''
 
 import argparse
-import pandas as pd
 import time
-import os,sys
-import coloredlogs
+import os
+import sys
 import logging
 import glob
-from collections import Counter
+
+
+logger = logging.getLogger('get_DMP_ID')
+try:
+    import coloredlogs
+    coloredlogs.install(level='DEBUG')
+except ImportError:
+    logger.warning("get_DMP_ID: coloredlogs is not installed, please install it if you wish to see color in logs on standard out.")
+    pass
+
+try:
+    import pandas as pd
+except ImportError, e:
+    logger.warning("get_DMP_ID: pandas is not installed, please install pandas as it is required to run the mapping.")
+    sys.exit(1)
 
 
 def main():
@@ -79,9 +92,6 @@ def main():
     verbose = args.verbose
     #Get where are we
     here = os.path.realpath('.')
-
-    logger = logging.getLogger('get_DMP_ID')
-    coloredlogs.install(level='DEBUG')
     
     if(os.path.isfile(args.idFilename)):
         if(verbose):
