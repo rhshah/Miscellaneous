@@ -86,7 +86,7 @@ def main():
         "--bamLocation",
         action="store",
         dest="bamLocation",
-        required=True,
+        required=False,
         metavar='/prefix/to/bam/file/location',
         help="Location where the deidentified bam files are")
     args = parser.parse_args()
@@ -124,8 +124,8 @@ def main():
         else:
             pass
     else:
-        logger.error("get_DMP_ID: %s is not a directory. We will exit. Please make sure you provide a valid bam location directory before rerun.", args.bamLocation)
-        sys.exit(1)
+        logger.warning("get_DMP_ID: %s is not a directory, and we wont add that column to the output", args.bamLocation)
+        
     outDF = pd.DataFrame(
         columns=[
             "SAMPLE_ID",
@@ -143,12 +143,15 @@ def main():
         if(dDF_idx):
             dID = dDF.loc[dDF_idx[0],"D_SAMPLE_ID"]
             gID = dDF.loc[dDF_idx[0],"GROUP_ID"]
-            bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
+            if(args.bamLocation):
+                bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
+            else:
+                bamFile = None
             outDF.loc[i,["SAMPLE_ID",
                              "D_SAMPLE_ID",
                              "SAMPLE_TYPE",
                              "GROUP_ID",
-                             "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),str(bamFile)]
+                             "BAM_LOCATION"]] = [str(iID),str(dID),"TUMOR",str(gID),bamFile]
             i = i+1
             #Get Normals
             gID_idx = dDF[dDF["GROUP_ID"] == gID].index.tolist()
@@ -157,12 +160,15 @@ def main():
                 if "-N" in dDF_iID:
                     dID = dDF.loc[gidx,"D_SAMPLE_ID"]
                     gID = dDF.loc[gidx,"GROUP_ID"]
-                    bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
+                    if(args.bamLocation):
+                        bamFile = ",".join(glob.glob(args.bamLocation +"/" + str(dID) +"*.bam"))
+                    else:
+                        bamFile = None
                     outDF.loc[i,["SAMPLE_ID",
                                      "D_SAMPLE_ID",
                                      "SAMPLE_TYPE",
                                      "GROUP_ID",
-                                     "BAM_LOCATION"]] = [str(dDF_iID),str(dID),"NORMAL",str(gID),str(bamFile)]
+                                     "BAM_LOCATION"]] = [str(dDF_iID),str(dID),"NORMAL",str(gID),bamFile]
                     i = i + 1
                 else:
                     continue
