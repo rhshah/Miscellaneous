@@ -26,7 +26,10 @@ import sys
 import logging
 import glob
 
-
+logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%m/%d/%Y %I:%M:%S %p',
+        level=logging.DEBUG)
 logger = logging.getLogger('get_DMP_ID')
 try:
     import coloredlogs
