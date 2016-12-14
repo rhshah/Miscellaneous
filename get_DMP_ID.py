@@ -159,7 +159,7 @@ def main():
                                      "D_SAMPLE_ID",
                                      "SAMPLE_TYPE",
                                      "GROUP_ID",
-                                     "BAM_LOCATION"]] = [str(iID),str(dID),"NORMAL",str(gID),str(bamFile)]
+                                     "BAM_LOCATION"]] = [str(dDF_iID),str(dID),"NORMAL",str(gID),str(bamFile)]
                     i = i + 1
                 else:
                     continue
