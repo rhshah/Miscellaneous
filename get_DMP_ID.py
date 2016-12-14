@@ -118,14 +118,18 @@ def main():
         logging.error("get_DMP_ID: %s is not a file. We will exit. Please make sure you provide a valid sample mapping file before rerun.", args.refFilename)
         sys.exit(1)
     
-    if(os.path.isdir(args.bamLocation)):
-        if(verbose):
-            logger.info("get_DMP_ID: %s is a directory", args.bamLocation)
+    if(args.bamLocation):
+        if(os.path.isdir(args.bamLocation)):
+            if(verbose):
+                logger.info("get_DMP_ID: %s is a directory", args.bamLocation)
+            else:
+                pass
         else:
-            pass
+            logger.error("get_DMP_ID: %s is not a directory, We will exit. Please make sure you provide a valid sample directory before rerun.", args.bamLocation)
+            sys.exit(1)
     else:
-        logger.warning("get_DMP_ID: %s is not a directory, and we wont add that column to the output", args.bamLocation)
-        
+        logger.warning("get_DMP_ID: bamLocation is not given, and we wont add that column to the output")
+
     outDF = pd.DataFrame(
         columns=[
             "SAMPLE_ID",
