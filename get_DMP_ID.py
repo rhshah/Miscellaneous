@@ -179,11 +179,12 @@ def main():
             
         else:
             logger.critical("Sample ID: %s is not present in mapping file we will print an empty entry.", iID)
-            outDF.loc[count,["SAMPLE_ID",
+            outDF.loc[i,["SAMPLE_ID",
                              "D_SAMPLE_ID",
                              "SAMPLE_TYPE",
                              "GROUP_ID",
                              "BAM_LOCATION"]] = [str(iID),None,"TUMOR",None,None] 
+            i = i + 1
             
     
     outDF.sort_values(["GROUP_ID"], inplace=True, ascending=True)  
