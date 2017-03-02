@@ -110,8 +110,9 @@ def main():
     if(os.path.isfile(args.idFilename)):
         if(verbose):
             logger.info("get_DMP_ID: %s is being Read...", args.refFilename)
-        dDF = pd.read_table(args.refFilename,sep=",",header=None,usecols=[0,1,2])
-        dDF.columns = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID"]
+        labels = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID","PartC","OncotreeCode","SampleType","PrimarySite","MetSite","TissueType"]
+        dDF = pd.read_table(args.refFilename,sep=",",names=labels)
+        #dDF.columns = ["SAMPLE_ID","D_SAMPLE_ID","GROUP_ID","PartC","OncotreeCode","SampleType","PrimarySite","MetSite","TissueType"]
         if(verbose):
             logger.info("Mapping DataFrame:\n%s",dDF.head(n=5))
     else:
