@@ -54,7 +54,8 @@ def main():
                                    "Match_Norm_Seq_Allele1"   , "Match_Norm_Seq_Allele2"  , "Tumor_Validation_Allele1"  , "Tumor_Validation_Allele2"  ,
                                    "Match_Norm_Validation_Allele1"  , "Match_Norm_Validation_Allele2"   , "Verification_Status"   , "Validation_Status"   ,
                                    "Mutation_Status"  , "Sequencing_Phase"   , "Sequence_Source" , "Validation_Method"  , "Score"   , "BAM_File" ,
-                                   "Sequencer"   , "t_ref_count"  , "t_alt_count"   , "n_ref_count"  , "n_alt_count"  , "DMP_cDNA_annotation" , "DMP_AA_annotation" ]) 
+                                   "Sequencer" ,"Tumor_Sample_UUID",   "Matched_Norm_Sample_UUID" ,  "HGVSc",  "HGVSp",   "HGVSp_Short",   "Transcript_ID",   "Exon_Number" ,
+                                   "t_depth" , "t_ref_count"  , "t_alt_count", "t_alt_freq" , "n_depth" , "n_ref_count"  , "n_alt_count"  ,"n_alt_freq","t_ref_pos", "t_ref_neg", "t_alt_pos", "t_alt_neg", "OccurenceInNormals", "Caller" ,"DMP_cDNA_annotation" , "DMP_AA_annotation" ]) 
     # This part prints out the variant list
     with open(VARIANT_FILE_LIST, "r") as file:
         for line in file:
@@ -64,7 +65,7 @@ def main():
             variant_data = parse(file_path)
             for x in variant_data:
                 #analysis_output_writer.writerow([x['Sample'], x['Chrom'], x['Start'], x['Ref'], x['Alt'], x['Gene'], x['cDNAchange'], x['AAchange'], x['T_AltFreq'], x['Exon'], x['VariantClass'], y['CancerType'], y['DetailedCancerType'], y['M-Number'], y['SurgPathNumber'], run_number])
-                
+                #print x
                 cbio_id = x['Sample']
                 sampleComment = x['Comments']
                 if('Likely Germline' in sampleComment):
@@ -98,7 +99,7 @@ def main():
                         alt = "-"
                     elif(len(x['Alt']) > 1):
                         alt = x['Alt'][1:]
-                    start_position = x['Start'] + 1
+                    start_position = int(x['Start']) + 1
                     end_position = int(x['Start']) + len(ref) 
                 elif len(x['Ref']) < len(x['Alt']):
                     var_type = "INS"
@@ -109,8 +110,10 @@ def main():
                     alt = x['Alt'][1:]
                     start_position = x['Start']
                     end_position = int(x['Start']) + 1
-                variant_data_writer.writerow([x['Gene'], "", "MSK-IMPACT", "hg19", x['Chrom'], start_position, end_position, "+" , x['VariantClass'], var_type, ref, alt, "", "", "", cbio_id,
-                                              "", "", "", "", "", "", "", "", "", sampleComment, "", "", "", "", "", "HiSeq-2500", x['T_RefCount'], x['T_AltCount'], x['N_RefCount'], x['N_AltCount'], x['cDNAchange'], x['AAchange']])
+                chromName = x['Chrom']
+                variant_data_writer.writerow(["", "0", "MSK-IMPACT", "GRCh37", chromName, start_position, end_position, "+" , "", var_type, ref, ref, alt, "", "", cbio_id, x['NormalUsed'],
+                                             "", "", "", "", "", "", "", "", sampleComment, "", "", "", "", "", "HiSeq-2500", "", "", "", "", "", "", "", 
+                                             x['T_TotalDepth'], x['T_RefCount'], x['T_AltCount'], x['T_AltFreq'], x['N_TotalDepth'], x['N_RefCount'], x['N_AltCount'],x['N_AltCount'], x['T_Ref+'], x['T_Ref-'],x['T_Alt+'], x['T_Alt-'], x['Occurence_in_Normals'], x['CallMethod']  , "", ""])
                 
     # This part combines the .seg files together
     print "Variant calls are processed...\n"
