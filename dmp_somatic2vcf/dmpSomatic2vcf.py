@@ -1,5 +1,5 @@
 '''
-dmpGermline2vcf
+dmpSomatic2vcf
 ~~~~~~~~~~
 
 :Description: This module converts multisample dmp maf like format to tumor/normal vcf
@@ -23,23 +23,23 @@ logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p',
         level=logging.DEBUG)
-logger = logging.getLogger('dmpGermline2vcf')
+logger = logging.getLogger('dmpSomatic2vcf')
 try:
     import coloredlogs
     coloredlogs.install(level='DEBUG')
 except ImportError:
-    logger.warning("dmpGermline2vcf: coloredlogs is not installed, please install it if you wish to see color in logs on standard out.")
+    logger.warning("dmpSomatic2vcf: coloredlogs is not installed, please install it if you wish to see color in logs on standard out.")
     pass
 
 try:
     import pandas as pd
 except ImportError, e:
-    logger.warning("dmpGermline2vcf: pandas is not installed, please install pandas as it is required to run the mapping.")
+    logger.warning("dmpSomatic2vcf: pandas is not installed, please install pandas as it is required to run the mapping.")
     sys.exit(1)
 
 
 def main():
-    parser = argparse.ArgumentParser(prog='dmpGermline2vcf.py', description='This module converts multi-sample dmp maf like format to tumor/normal vcf', usage='%(prog)s [options]')
+    parser = argparse.ArgumentParser(prog='dmpSomatic2vcf.py', description='This module converts multi-sample dmp maf like format to tumor/normal vcf', usage='%(prog)s [options]')
     parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", help="make lots of noise [default]")
     parser.add_argument("-dmp", "--dmp_input_list", action="store", dest="mInput", required=True, metavar='file.txt or listoffiles.list', help="Location of the mutation file or list of files to be used")
     parser.add_argument("-vcf", "--vcf_output", action="store", dest="vcf", required=True, metavar='AnnotatedSV', help="Full path with prefix name for the output file")
@@ -59,10 +59,10 @@ def ReadMfile(input):
         for count,file in enumerate(allFiles):
             with open(file,'r') as filecontent:
                 header = filecontent.readline().strip('\n').split('\t')
-                #header = header[0:35]
+                header = header[0:35]
                 for line in filecontent:
                     data = line.strip('\n').split('\t')
-                    #data = data[0:35]
+                    data = data[0:35]
                     listdf.append(data)
         dataDF = pd.DataFrame(listdf,columns=header)
     else:
@@ -75,7 +75,8 @@ def makeVCFheader():
               "##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Depth matching reference/alternate (REF/ALT) allele\">",
               "##FORMAT=<ID=ADF,Number=1,Type=Integer,Description=\"Depth matching forward reference/alternate (REF/ALT) allele\">",
               "##FORMAT=<ID=ADR,Number=1,Type=Integer,Description=\"Depth matching reverse reference/alternate (REF/ALT) allele\">",
-              "##INFO=<ID=Sample,Number=1,Type=String,Description=\"Name of the Sample where the variant is called\">",
+              "##INFO=<ID=Tumor_Sample,Number=1,Type=String,Description=\"Name of the Sample where the variant is called\">",
+              "##INFO=<ID=Normal_Sample,Number=1,Type=String,Description=\"Name of the Sample where the variant is compared with.\">",
               "##INFO=<ID=CallMethod,Number=1,Type=String,Description=\"Name of the tool used to make the call\">",
               "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tTUMOR\tNORMAL"]
     header = "\n".join(header)
@@ -94,8 +95,9 @@ def makeVCF( dataDF, header, vcf):
         qual = "."
         filter = "PASS"
         sampleId = row.loc['Sample']
+        normalID = row.loc['NormalUsed']
         callmethod = row.loc['CallMethod']
-        info = "Sample=" + sampleId + ";" + "CallMethod=" + callmethod
+        info = "Tumor_Sample=" + sampleId + ";" + "Normal_Sample=" + normalID + ";" + "CallMethod=" + callmethod
         tdp = row.loc['T_TotalDepth']
         trd = row.loc['T_RefCount']
         tad = row.loc['T_AltCount']
@@ -104,10 +106,14 @@ def makeVCF( dataDF, header, vcf):
         trdn = row.loc['T_Ref-'] 
         tadp = row.loc['T_Alt+'] 
         tadn = row.loc['T_Alt-'] 
-        tdpp = int(trdp) + int(tadp)
-        tdpn = int(trdn) + int(tadn)
+        ndp = row.loc['N_TotalDepth']
+        nrd = row.loc['N_RefCount']
+        nad = row.loc['N_AltCount']
+        nvf = row.loc['N_AltFreq']
+
         tumor = str(tdp) + ":" + str(trd) + "," + str(tad) + ":" + str(trdp) + "," + str(tadp) + ":" + str(trdn) + "," + str(tadn)
-        normal = "0:0,0:0,0:0,0"
+        normal = str(ndp) + ":" + str(nrd) + "," + str(nad) + ":0,0:0,0"
+        
         vcf_fh.write("\t".join([chrom,pos,id,ref,alt,qual,filter,info,allelic_format,tumor,normal]) + "\n")
         
     vcf_fh.close()
@@ -116,5 +122,6 @@ if __name__ == "__main__":
     main()
     end_time = time.time()
     totaltime = end_time - start_time
-    logging.info("dmpGermline2vcf: Elapsed time was %g seconds", totaltime)
-	sys.exit(0)    
+    logging.info("dmpSomatic2vcf: Elapsed time was %g seconds", totaltime)
+    sys.exit(0)
+    
