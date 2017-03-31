@@ -153,7 +153,10 @@ my $count = 0;
 for my $i (@data){
 	my($name,$chrstr,$min,$q10,$q25,$q50,$q75,$q90,$max,$mean,$sd,$cv) = split("\t",$i);
 	my $zscore_mean = ($mean - $mean_avg)/$mean_sd;
-	my $zscore_sd = ($sd - $sd_avg)/$sd_sd;
+	my $zscore_sd = 0;
+	if ($sd_sd != 0) {
+		$zscore_sd = ($sd - $sd_avg)/$sd_sd;
+	}
 	my $zscore_cv = ($cv - $cv_avg)/$cv_sd;
 	print OUT "$name\t$chrData[$count]\t$chrstr\t$min\t$q10\t$q25\t$q50\t$q75\t$q90\t$max\t$mean\t$sd\t$cv\t$zscore_mean\t$zscore_sd\t$zscore_cv\n";
 	$count++
