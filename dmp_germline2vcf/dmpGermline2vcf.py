@@ -117,4 +117,4 @@ if __name__ == "__main__":
     end_time = time.time()
     totaltime = end_time - start_time
     logging.info("dmpGermline2vcf: Elapsed time was %g seconds", totaltime)
-	sys.exit(0)    
+    sys.exit(0)
