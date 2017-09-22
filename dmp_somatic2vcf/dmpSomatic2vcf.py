@@ -71,6 +71,7 @@ def ReadMfile(input):
 
 def makeVCFheader():
     header = ["##fileformat=VCFv4.3",
+              "##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">"
               "##FORMAT=<ID=DP,Number=1,Type=Integer,Description=\"Total depth\">",
               "##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Depth matching reference/alternate (REF/ALT) allele\">",
               "##FORMAT=<ID=ADF,Number=1,Type=Integer,Description=\"Depth matching forward reference/alternate (REF/ALT) allele\">",
@@ -85,7 +86,7 @@ def makeVCFheader():
 def makeVCF( dataDF, header, vcf):
     vcf_fh = open(vcf, "wb")
     vcf_fh.write(header + "\n")
-    allelic_format = "DP:AD:ADF:ADR"
+    allelic_format = "GT:DP:AD:ADF:ADR"
     for idx,row in dataDF.iterrows():
         chrom = row.loc['Chrom']
         pos = row.loc['Start']
@@ -111,10 +112,10 @@ def makeVCF( dataDF, header, vcf):
         nad = row.loc['N_AltCount']
         nvf = row.loc['N_AltFreq']
 
-        tumor = str(tdp) + ":" + str(trd) + "," + str(tad) + ":" + str(trdp) + "," + str(tadp) + ":" + str(trdn) + "," + str(tadn)
-        normal = str(ndp) + ":" + str(nrd) + "," + str(nad) + ":0,0:0,0"
+        tumor = str("0/1") + ":" + str(tdp) + ":" + str(trd) + "," + str(tad) + ":" + str(trdp) + "," + str(tadp) + ":" + str(trdn) + "," + str(tadn)
+        normal = str("0/0") + ":" + str(ndp) + ":" + str(nrd) + "," + str(nad) + ":0,0:0,0"
         
-        vcf_fh.write("\t".join([chrom,pos,id,ref,alt,qual,filter,info,allelic_format,tumor,normal]) + "\n")
+        vcf_fh.write("\t".join([str(chrom),str(pos),str(id),str(ref),str(alt),str(qual),str(filter),str(info),str(allelic_format),str(tumor),str(normal)]) + "\n")
         
     vcf_fh.close()
 if __name__ == "__main__":
